@@ -26,7 +26,7 @@ def get_d2(d_1, sigma, T, t):
   d2 = d_1 - sigma * math.sqrt(T-t)
   return d2
 
-def get_delta(d1):
+def get_delta_put(d1):
   # delta가 0.5라면, 기초자산이 1% 움직일 때, 옵션의 가격은 0.5% 변동한다는 의미
   # 콜 옵션 매수 포지션의 경우 0 ~ 1 사이의 값으로 나타냄, 내가격 (ITM)일수록 1에 가깝고
   # 외가격 (OTM)일수록 0에 가까운 델타값을 가지게 된다.
@@ -34,7 +34,10 @@ def get_delta(d1):
   # 외가격이란, 시장가격 < 행사가격 -> 권리 사용
   # 행사 가능성이 높을수록 기초 자산 가격변동에 옵션 가격이 민감하게 움직이고
   # 행사 가능성이 낮을수록 기초 자산과 옵션 가격의 correlation이 낮다는 말이 됨
-  return norm.cdf(d1) / (norm.cdf(d1) - 1)
+  return norm.cdf(d1) - 1
+
+def get_delta_call(d1):
+  return norm.cdf(d1)
 
 def get_gamma(s,d_1,sigma,T,t):
   # 기초 자산 가격의 변동 대비 델타의 변동을 나타냄
