@@ -4,8 +4,8 @@ from scipy.stats import norm
 v = 0 # option price
 s = 0 # 기초자산가격
 k = 0 # 행사 가격
-T = 0 
-t = 0
+T = 0 # 만기 시점
+t = 0 # 현재 시점
 T-t # 잔존 만기
 sigma = 0 # 기초 자산 변동성'''
 # r = risk free interest rate => t - bill (United States Treasury securitie)
@@ -36,29 +36,26 @@ def get_delta(d1):
   # 행사 가능성이 낮을수록 기초 자산과 옵션 가격의 correlation이 낮다는 말이 됨
   return norm.cdf(d1) / (norm.cdf(d1) - 1)
 
-def prime_normal_distribution(x):
-  return (1 / math.sqrt(2*math.pi)) * math.exp(-x**2 / 2)
-
 def get_gamma(s,d_1,sigma,T,t):
   # 기초 자산 가격의 변동 대비 델타의 변동을 나타냄
   # 기초 자산의 가격과 델타와의 상관관계를 나타냄
-  return (prime_normal_distribution(d_1) / (s * sigma * math.sqrt(T-t)))
+  return (norm.pdf(d_1) / (s * sigma * math.sqrt(T-t)))
 
 def get_setta_call(s,d_1,sigma,T,t,r,k,d_2):
   # 시간에 따른 옵션가격의 변동률을 나타냄
   # 블랙 숄즈 방정식을 t(시간)으로 편미분하여 세타 구함
   # t가 0에 가까울수록, 만기가 가까워질수록 세타는 가파르게 떨어짐
-  setta_call = -(s * prime_normal_distribution(d_1) * sigma) / (2 * math.sqrt(T-t)) - r * k * math.exp(-r*(T-t)*norm.cdf(d_2))
+  setta_call = -(s * norm.pdf(d_1) * sigma) / (2 * math.sqrt(T-t)) - r * k * math.exp(-r*(T-t)*norm.cdf(d_2))
   return setta_call
 
 def get_setta_put(s, d_1, sigma, T, t, r, k, d_2):
-  setta_put = -(s*prime_normal_distribution(d_1) * sigma) / (2 * math.sqrt(T-t)) + r * k * math.exp(-r*(T-t))*(norm.cdf(-d_2))
+  setta_put = -(s * norm.pdf(d_1) * sigma) / (2 * math.sqrt(T-t)) + r * k * math.exp(-r*(T-t))*(norm.cdf(-d_2))
   return setta_put
 
 def get_vega(s,T,t,d_1):
   # 기초 자산의 변동성의 변화 대비 옵션가격의 변동률을 나타냄
   # 베가는 변동성이 낮을수록 옵션가격의 민감도가 높음
-  vega = s*math.sqrt(T-t)*(prime_normal_distribution(d_1))
+  vega = s*math.sqrt(T-t)*(norm.pdf(d_1))
   return vega
 
 def get_rho_call(k,T,r,t,d_2):
