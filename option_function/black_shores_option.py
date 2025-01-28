@@ -18,7 +18,7 @@ def black_shores_put(k,r,T,t,d_2,d_1,s):
   put = k * math.exp(-r * (T-t)) * norm.cdf(-d_2) - s * norm.cdf(-d_1)
   return put
 
-def get_d1(s,k,r,sigma, T):
+def get_d1(s,k,r,sigma, T, t):
   d1 = (math.log(s/k) + (r + (sigma ** 2) / 2) * T) / sigma * math.sqrt(T-t)
   return d1
 
