@@ -41,8 +41,8 @@ def black_shores_option():
     put_price = black_shores_put(k, r, T, t, d_2, d_1, s)
     print(f"d_1, d_2, call_price, put_price : {d_1, d_2, call_price, put_price}")
 
-black_shores_option()
-
+#black_shores_option()
+kis()
 
 '''
 d_1, d_2, call_price, put_price : (0.03740885015893052, -0.13936784513770636, np.float64(12.469128506987616), np.float64(12.901462232229136))
